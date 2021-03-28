@@ -19,6 +19,7 @@ app.use("/api/v1", router);
 router.get("/locations/:id", (request, response) => {
   db.doc(request.params.id).get()
       .then((location) => response.status(200).json({
+
         id: location.id,
         userID: location.userID,
         locationName: location.data().locationName,
@@ -27,7 +28,12 @@ router.get("/locations/:id", (request, response) => {
         address: location.data().address,
         number: location.data().number,
         imageUrl: location.data().imageUrl,
-        geolocation: location.data().geolocation,
+        geolocation:
+        {"latitude":
+        location.data().geolocation.latitude.toString(),
+        "longitude":
+        location.data().geolocation.longitude.toString(),
+        },
         createDate: new Date(location.data().createDate),
       })
           .catch((error) => response.status(400)
