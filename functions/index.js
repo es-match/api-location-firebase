@@ -57,6 +57,8 @@ router.get("/locations", (request, response) => {
             imageUrl: location.data().imageUrl,
             geolocation: location.data().geolocation,
             createDate: new Date(location.data().createDate),
+            avaiableDays: location.data().avaiableDays,
+            avaiableHours: location.data().avaiableHours,
           });
         });
 
@@ -95,6 +97,21 @@ router.delete("/locations/:id", (request, response) => {
       });
 });
 
+
+router.patch("/locations/avaiability/:id", (request, response) => {
+  if (request.body.avaiableDays == null) {
+    response.status(400).send("Missing avaiableDays");
+  } else if (request.body.avaiableHours == null) {
+    response.status(400).send("Missing avaiableHours");
+  } else {
+    db.doc(request.params.id).set({
+      "avaiableDays": request.body.avaiableDays,
+      "avaiableHours": request.body.avaiableHours,
+    },{"merge":true}).then(response.status(200).send("Updated"));
+  }
+});
+
+
 // Update new contact
 router.patch("/locations/:id", (request, response) => {
   // const startDate = new Date(Date.parse(request.body.startDate));
@@ -119,5 +136,6 @@ router.patch("/locations/:id", (request, response) => {
     response.status(500).send("ERRO: " + ex.message);
   }
 });
+
 
 exports.dbLocations = functions.https.onRequest(app);
