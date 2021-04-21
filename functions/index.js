@@ -107,7 +107,7 @@ router.patch("/locations/avaiability/:id", (request, response) => {
     db.doc(request.params.id).set({
       "avaiableDays": request.body.avaiableDays,
       "avaiableHours": request.body.avaiableHours,
-    },{"merge":true}).then(response.status(200).send("Updated"));
+    }, {"merge": true}).then(response.status(200).send("Updated"));
   }
 });
 
