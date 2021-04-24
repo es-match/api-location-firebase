@@ -59,6 +59,7 @@ router.get("/locations", (request, response) => {
             createDate: new Date(location.data().createDate),
             avaiableDays: location.data().avaiableDays,
             avaiableHours: location.data().avaiableHours,
+            hourValue: location.data().hourValue,
           });
         });
 
@@ -103,10 +104,13 @@ router.patch("/locations/avaiability/:id", (request, response) => {
     response.status(400).send("Missing avaiableDays");
   } else if (request.body.avaiableHours == null) {
     response.status(400).send("Missing avaiableHours");
+  } else if (request.body.hourValue == null) {
+    response.status(400).send("Missing hourValue");
   } else {
     db.doc(request.params.id).set({
       "avaiableDays": request.body.avaiableDays,
       "avaiableHours": request.body.avaiableHours,
+      "hourValue": request.body.hourValue,
     }, {"merge": true}).then(response.status(200).send("Updated"));
   }
 });
