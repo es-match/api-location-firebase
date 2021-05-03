@@ -59,7 +59,7 @@ router.get("/locations", (request, response) => {
             {"_latitude":
             location.data().geolocation.latitude,
             "_longitude":
-            location.data().geolocation.latitude,
+            location.data().geolocation.longitude,
             },
             createDate: new Date(location.data().createDate),
             avaiableDays: location.data().avaiableDays,
