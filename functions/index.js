@@ -29,10 +29,10 @@ router.get("/locations/:id", (request, response) => {
         number: location.data().number,
         imageUrl: location.data().imageUrl,
         geolocation:
-        {"latitude":
-        location.data().geolocation.latitude.toString(),
-        "longitude":
-        location.data().geolocation.longitude.toString(),
+        {"_latitude":
+        location.data().geolocation.latitude,
+        "_longitude":
+        location.data().geolocation.latitude,
         },
         createDate: new Date(location.data().createDate),
       })
@@ -55,7 +55,12 @@ router.get("/locations", (request, response) => {
             address: location.data().address,
             number: location.data().number,
             imageUrl: location.data().imageUrl,
-            geolocation: location.data().geolocation,
+            geolocation:
+            {"_latitude":
+            location.data().geolocation.latitude,
+            "_longitude":
+            location.data().geolocation.latitude,
+            },
             createDate: new Date(location.data().createDate),
             avaiableDays: location.data().avaiableDays,
             avaiableHours: location.data().avaiableHours,
@@ -84,9 +89,12 @@ router.post("/locations", (request, response) => {
     "geolocation": geoloc,
     "createDate": actualDate,
   };
+
+
   db.add(newLocation)
-      .then(() => {
-        response.status(200).json("Success Added");
+      .then((location) => {
+        newLocation.id = location.id;
+        response.status(200).json(newLocation);
       });
 });
 
@@ -138,8 +146,9 @@ router.patch("/locations/:id", (request, response) => {
        newLocation.geolocation = geoloc;
     }
     db.doc(request.params.id).update(newLocation)
-        .then(
-            (location) => response.send(`${location.id} updated sucessfully`)
+        .then((location) =>
+          response.status(200)
+              .send(`${location.id} updated sucessfully`)
         );
   } catch (ex) {
     response.status(500).send("ERRO: " + ex.message);
