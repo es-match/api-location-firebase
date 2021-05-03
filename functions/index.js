@@ -71,6 +71,8 @@ router.get("/locations", (request, response) => {
 router.post("/locations", (request, response) => {
   const actualDate = new Date(Date.now());
 
+  var geoloc = new firebase.firestore.GeoPoint(request.body.latitude, request.body.longitude)
+  
   const newLocation = {
     "userID": request.body.userID,
     "locationName": request.body.name,
@@ -79,7 +81,7 @@ router.post("/locations", (request, response) => {
     "address": request.body.address,
     "number": request.body.number,
     "imageUrl": request.body.imageUrl,
-    "geolocation": request.body.geolocation,
+    "geolocation": geoloc,
     "createDate": actualDate,
   };
   db.add(newLocation)
@@ -124,14 +126,17 @@ router.patch("/locations/:id", (request, response) => {
     const newLocation = {};
     const body = request.body;
     if (body.userID) newLocation.userID = body.userID;
-
+    
     if (body.locationName) newLocation.locationName = body.locationName;
     if (body.zip) newLocation.zip = body.zip;
     if (body.city) newLocation.city = body.city;
     if (body.address) newLocation.address = body.address;
     if (body.number) newLocation.number = body.number;
     if (body.imageUrl) newLocation.imageUrl = body.imageUrl;
-    if (body.geolocation) newLocation.geolocation = body.geolocation;
+    if (body.latitude && body.longitude){
+      var geoloc = new firebase.firestore.GeoPoint(body.latitude, body.longitude)
+       newLocation.geolocation = geoloc;
+    }
     db.doc(request.params.id).update(newLocation)
         .then(
             (location) => response.send(`${location.id} updated sucessfully`)
