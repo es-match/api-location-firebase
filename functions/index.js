@@ -77,17 +77,20 @@ router.post("/locations", (request, response) => {
   const actualDate = new Date(Date.now());
 
   const geoloc =
-  new admin.firestore.GeoPoint(request.body.latitude, request.body.longitude);
+   new admin.firestore.GeoPoint(request.body.latitude, request.body.longitude);
 
   const newLocation = {
-    "userID": request.body.userID,
-    "locationName": request.body.name,
-    "zip": request.body.zip,
-    "city": request.body.city,
     "address": request.body.address,
-    "number": request.body.number,
-    "imageUrl": request.body.imageUrl,
+    "avaiableDays": request.body.avaiableDays,
+    "avaiableHours": request.body.avaiableHours,
+    "city": request.body.city,
     "geolocation": geoloc,
+    "hourValue": request.body.hourValue,
+    "imageUrl": request.body.imageUrl,
+    "locationName": request.body.locationName,
+    "number": request.body.number,
+    "userID": request.body.userID,
+    "zip": request.body.zip,
     "createDate": actualDate,
   };
 
