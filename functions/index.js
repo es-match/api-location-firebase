@@ -135,26 +135,43 @@ router.patch("/locations/:id", (request, response) => {
   // const startDate = new Date(Date.parse(request.body.startDate));
   // const endDate = new Date(Date.parse(request.body.endDate));
   try {
-    const newLocation = {};
-    const body = request.body;
-    if (body.userID) newLocation.userID = body.userID;
+    const updatedLocation = {
+    "address": request.body.address,
+    // "avaiableDays": request.body.avaiableDays,
+    // "avaiableHours": request.body.avaiableHours,
+    "city": request.body.city,
+    // "geolocation": geoloc,
+    // "hourValue": request.body.hourValue,
+    // "imageUrl": request.body.imageUrl,
+    "locationName": request.body.locationName,
+    "number": request.body.number,
+    "userID": request.body.userID,
+    "zip": request.body.zip,
+    // "createDate": actualDate,
+  };
 
-    if (body.locationName) newLocation.locationName = body.locationName;
-    if (body.zip) newLocation.zip = body.zip;
-    if (body.city) newLocation.city = body.city;
-    if (body.address) newLocation.address = body.address;
-    if (body.number) newLocation.number = body.number;
-    if (body.imageUrl) newLocation.imageUrl = body.imageUrl;
-    if (body.latitude && body.longitude) {
-      const geoloc =
-      new admin.firestore.GeoPoint(body.latitude, body.longitude);
-      newLocation.geolocation = geoloc;
-    }
-    db.doc(request.params.id).update(newLocation)
-        .then((location) =>
-          response.status(200)
-              .send(`${location.id} updated sucessfully`)
-        );
+  db.doc(request.params.id).set(updatedLocation, {"merge": true}).then(response.status(200).send("Updated"));
+
+  //   const newLocation = {};
+  //   const body = request.body;
+  //   if (body.userID) newLocation.userID = body.userID;
+
+  //   if (body.locationName) newLocation.locationName = body.locationName;
+  //   if (body.zip) newLocation.zip = body.zip;
+  //   if (body.city) newLocation.city = body.city;
+  //   if (body.address) newLocation.address = body.address;
+  //   if (body.number) newLocation.number = body.number;
+  //   if (body.imageUrl) newLocation.imageUrl = body.imageUrl;
+  //   if (body.latitude && body.longitude) {
+  //     const geoloc =
+  //     new admin.firestore.GeoPoint(body.latitude, body.longitude);
+  //     newLocation.geolocation = geoloc;
+  //   }
+  //   db.doc(request.params.id).update(newLocation)
+  //       .then((location) =>
+  //         response.status(200)
+  //             .send(`${location.id} updated sucessfully`)
+  //       );
   } catch (ex) {
     response.status(500).send("ERRO: " + ex.message);
   }
